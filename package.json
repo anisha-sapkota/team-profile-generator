@@ -1,0 +1,22 @@
+{
+  "name": "team-profile-generator",
+  "version": "1.0.0",
+  "description": "Team profile generator",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anisha-sapkota/team-profile-generator.git"
+  },
+  "author": "Anisha Sapkota",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anisha-sapkota/team-profile-generator/issues"
+  },
+  "homepage": "https://github.com/anisha-sapkota/team-profile-generator#readme",
+  "dependencies": {
+    "inquirer": "^9.1.2"
+  }
+}
