@@ -1,4 +1,4 @@
-const html = (content) => `<!DOCTYPE html>
+exports.html = (cards) => `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -21,39 +21,22 @@ const html = (content) => `<!DOCTYPE html>
     <main
       class="max-w-screen-xl mx-auto flex flex-row flex-wrap justify-center gap-3 px-1"
     >
-     ${content}
+      ${cards}
     </main>
   </body>
 </html>`;
 
-const card = () => `<div
-class="columns w-96 bg-white rounded-lg border border-gray-200 shadow-md flex flex-col"
->
-<h2 class="bg-blue-500 text-white text-center p-4">
-  ${heading}
-  ${name} - <i class="bi bi-cup-hot"></i> ${role}
-</h2>
-<div class="p-4">
-  <ul
-    class="text-sm font-medium text-gray-900 bg-white border border-gray-200"
-  >
-    <li
-      class="py-2 px-4 w-full border-b border-gray-200 dark:border-gray-600"
-    >
-      Id: ${id}
-    </li>
-    <li
-      class="py-2 px-4 w-full rounded-t-lg border-b border-gray-200 dark:border-gray-600"
-    >
-      Email: <a href="mailto:${email}">${email}</a>
-    </li>
-    <li
-      class="py-2 px-4 w-full border-b border-gray-200 dark:border-gray-600"
-    >
-      ${additional}
-    </li>
-  </ul>
-</div>
-</div>`;
-
-module.exports = template;
+exports.card = (heading, id, email, additional) => `
+      <div class="columns w-96 bg-white rounded-lg border border-gray-200 shadow-md flex flex-col">
+        <h2 class="bg-blue-500 text-white text-center p-4">${heading}</h2>
+        <div class="p-4">
+          <ul class="text-sm font-medium text-gray-900 bg-white border border-gray-200">
+            <li class="py-2 px-4 w-full border-b border-gray-200">Id: ${id}</li>
+            <li class="py-2 px-4 w-full rounded-t-lg border-b border-gray-200">
+              Email: <a class="text-blue-600 hover:text-blue-800 visited:text-purple-600" href="mailto:${email}">${email}</a>
+            </li>
+            <li class="py-2 px-4 w-full border-b border-gray-200">${additional}</li>
+          </ul>
+        </div>
+      </div>
+`;

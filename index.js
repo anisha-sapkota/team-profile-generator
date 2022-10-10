@@ -1,13 +1,14 @@
-// import inquirer library
+// import required libraries
 const inquirer = require("inquirer");
+const fs = require("fs");
 
 // import classes
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 
-// employees array
-const employees = [];
+// import template
+const template = require("./src/template");
 
 // function for returning questions for a given employee type
 const getQuestions = (employeeType) => {
@@ -26,11 +27,14 @@ const getQuestions = (employeeType) => {
       type: "input",
       message: `What is the ${employeeType}'s email address?`,
       name: "email",
+      // function for validating email
       validate: (email) => {
-        // Regex mail check (return true if valid mail)
-        return /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+([^<>()\.,;:\s@\"]{2,}|[\d\.]+))$/.test(
-          email
-        );
+        valid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
+        if (valid) {
+          return true;
+        } else {
+          return "Please enter a valid email address";
+        }
       },
     },
   ];
@@ -70,8 +74,59 @@ const additionalMemberQuestion = {
   choices: ["Engineer", "Intern", "I don't want to add any more team members"],
 };
 
+// creates a file with fileName and data provided in parameters
+const writeToFile = (fileName, data) => {
+  fs.writeFile(fileName, data, (err) =>
+    err ? console.log(err) : console.log(`Successfully generated ${fileName}!`)
+  );
+};
+
+// function for returning icon based on the role
+const getIcon = (role) => {
+  switch (role) {
+    case "Manager":
+      return '<i class="bi bi-cup-hot"></i>';
+    case "Engineer":
+      return '<i class="bi bi-sunglasses"></i>';
+    case "Intern":
+      return '<i class="bi bi-mortarboard-fill"></i>';
+    default:
+      return "";
+  }
+};
+
+// function for returning unique info of each employee type
+const getAdditionalInfo = (employee) => {
+  if (employee.getRole() === "Manager") {
+    return `Office number: ${employee.getOfficeNumber()}`;
+  } else if (employee.getRole() === "Engineer") {
+    return `GitHub: <a class="text-blue-600 hover:text-blue-800 visited:text-purple-600" href="https://github.com/${employee.getGithub()}" target="_blank">${employee.getGithub()}</a>`;
+  } else {
+    return `School: ${employee.getSchool()}`;
+  }
+};
+
+// function for generating the html template
+const generateTemplate = (employees) => {
+  let cards = "";
+  for (const employee of employees) {
+    const role = employee.getRole();
+    const heading = `${employee.getName()} - ${getIcon(role)} ${role}`;
+    const id = employee.getId();
+    const email = employee.getEmail();
+    const additional = getAdditionalInfo(employee);
+    cards += template.card(heading, id, email, additional);
+  }
+
+  const htmlTemplate = template.html(cards);
+  writeToFile("dist/index.html", htmlTemplate);
+};
+
 // initialization function
 const init = async () => {
+  // employees array
+  const employees = [];
+
   // get manager's details
   let data = await inquirer.prompt(getQuestions("team manager"));
   // create new manager and push it to employees array
@@ -84,16 +139,22 @@ const init = async () => {
     // prompt for additional team members
     data = await inquirer.prompt([additionalMemberQuestion]);
 
+    // if Engineer is chosen - ask for engineer details
     if (data.type === "Engineer") {
       data = await inquirer.prompt(getQuestions("engineer"));
       employees.push(new Engineer(data.name, data.email, data.id, data.github));
     } else if (data.type === "Intern") {
+      // ask for intern details
       data = await inquirer.prompt(getQuestions("intern"));
       employees.push(new Intern(data.name, data.email, data.id, data.school));
     } else {
+      // no more members
       moreMembers = false;
     }
   } while (moreMembers);
+
+  // call function to generate template using the collected information
+  generateTemplate(employees);
 };
 
 init();

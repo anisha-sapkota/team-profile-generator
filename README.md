@@ -4,4 +4,5 @@ Team profile generator using javascript
 
 ## Helpful resources
 
-- <https://stackoverflow.com/questions/65189877/how-can-i-validate-that-a-user-input-their-email-when-using-inquirer-npm>
+- <https://gist.github.com/Amitabh-K/ae073eea3d5207efaddffde19b1618e8>
+- <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function>
