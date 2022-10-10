@@ -20,6 +20,8 @@ npm start
 
 Once started, answer the prompted questions to generate the team profile html page. Once done, a filled called `index.html` will be generated in the `dist` folder.
 
+Video demonstration can be found [here](https://watch.screencastify.com/v/K0f0Cz3y8uWeJXQxVmor).
+
 ## Tests
 
 To run tests, run the following command:
